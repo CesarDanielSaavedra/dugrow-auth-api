@@ -15,12 +15,17 @@ return [
     |
     */
 
-    'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
-        '%s%s',
-        'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1',
-        Sanctum::currentApplicationUrlWithPort(),
-        // Sanctum::currentRequestHost(),
-    ))),
+    // Esta configuracion es para utilizar Sanctum con laravel en modo monolito
+    // 'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', sprintf(
+    //     '%s%s',
+    //     'localhost,localhost:3000,127.0.0.1,127.0.0.1:8000,::1',
+    //     Sanctum::currentApplicationUrlWithPort(),
+    //     // Sanctum::currentRequestHost(),
+    // ))),
+
+    // Esta configuracion es para utilizar Sanctum como API backend separado
+    // y que no utilice cookies, sino tokens Bearer en la cabecera Authorization
+    'stateful' => [],
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +39,7 @@ return [
     |
     */
 
-    'guard' => ['web'],
+    'guard' => ['api'],
 
     /*
     |--------------------------------------------------------------------------
