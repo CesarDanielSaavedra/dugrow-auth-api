@@ -444,6 +444,19 @@ return response()->json([
 
 ---
 
+## Estructura de modelos y carpetas
+
+- Los modelos se agrupan por contexto en subdirectorios dentro de `app/Models`.
+  - Ejemplo: `app/Models/Auth/User.php`, `app/Models/Auth/Role.php`
+
+## Convención de nombres
+
+- Los modelos se nombran en singular y con mayúscula inicial (ej: `User`, `Role`).
+- Las tablas en la base de datos se nombran en plural y minúsculas (ej: `users`, `roles`).
+- Los modelos siguen el namespace correspondiente a su carpeta.
+
+---
+
 ## 🔄 Guía de Separación Futura
 
 ### **¿Cuándo separar?**
