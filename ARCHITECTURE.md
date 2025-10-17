@@ -177,7 +177,7 @@ Después de `install:api`, verificá:
 # 1. Sanctum instalado
 php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
 
-# 2. Migraciones ejecutadas
+# 2. php aphp aphp aphp aphp aphp artisan db:seed --class=Database\Seeders\Auth\DatabaseSeederejecutadas
 php artisan migrate
 
 # 3. Rutas API registradas
@@ -800,3 +800,40 @@ En la planificación inicial se consideró separar la lógica por tipo de API, p
 **Última actualización:** Octubre 2025  
 **Versión:** 1.0  
 **Autor:** Daniel Saavedra (DuGrow)
+
+---
+
+## Migraciones: exclusivas y compartidas entre APIs
+
+En una arquitectura separation-ready, las migraciones deben organizarse por dominio y contexto:
+
+- **Migraciones exclusivas de Auth:**
+  - `users`, `roles`, `personal_access_tokens` → Solo en la API de autenticación.
+  - La API de negocio nunca accede directamente a estas tablas; consulta usuarios vía HTTP a la API de Auth.
+
+- **Migraciones compartidas:**
+  - `jobs`, `failed_jobs`, `job_batches`, `cache`, `cache_locks` → Pueden estar en ambas APIs si cada una usa colas o caché de Laravel.
+  - Al separar los dominios, copia estas migraciones a la carpeta correspondiente de cada API.
+
+**Recomendación:**
+- Mantén las migraciones organizadas en subcarpetas (`auth/`, `business/`) para facilitar la separación y el mantenimiento.
+- Documenta en cada API qué migraciones son propias y cuáles son compartidas.
+
+**Ejemplo de estructura:**
+```
+database/
+  migrations/
+    auth/
+      create_users_table.php
+      create_roles_table.php
+      create_personal_access_tokens_table.php
+      create_jobs_table.php
+      create_cache_table.php
+    business/
+      create_wines_table.php
+      create_gym_members_table.php
+      create_jobs_table.php
+      create_cache_table.php
+```
+
+Esto asegura consistencia y claridad en la evolución del proyecto.
