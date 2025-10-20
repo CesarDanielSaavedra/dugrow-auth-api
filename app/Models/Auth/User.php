@@ -19,13 +19,20 @@ class User extends Authenticatable
         'email',
         'role_id',
         'password',
+        'company_id',
         'email_verified_at',
         'remember_token',
     ];
 
+    // Relación: un usuario tiene un rol
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id');
+    }
+    // Relación: un usuario pertenece a una empresa
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 
     protected $hidden = [
