@@ -16,7 +16,7 @@ class RoleSeeder extends Seeder
         ]);
 
         Role::firstOrCreate([
-            'name' => 'common',
+            'name' => 'user',
         ], [
             'description' => 'Usuario común',
         ]);

@@ -24,11 +24,7 @@ Route::prefix('auth/v1')->group(function () {
     // ============================================
 
     // Registro de nuevo usuario
-    Route::post('/signup', function () {
-        return response()->json([
-            'message' => 'Endpoint /signup - TODO: Implementar RegisterController'
-        ]);
-    });
+    Route::post('/signup', [\App\Http\Controllers\Auth\RegisterController::class, 'register']);
 
     // Login (obtener token)
     Route::post('/token', function () {
