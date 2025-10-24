@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RegisterRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,16 +24,10 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => [
-                'required',
-                'string',
-                'min:8',
-                'regex:/^(?=.*[A-Z])(?=.*[!@#$%^&*]).+$/',
-            ],
+            'email' => 'required|email|exists:users,email',
+            // La expresión regular para símbolo especial escapa correctamente las comillas y el slash
+            'password' => 'required|string|min:8|regex:/[A-Z]/|regex:/[!@#$%^&*(),.?{}<>]/',
             'company_id' => 'required|exists:companies,id',
-            'role_id' => 'nullable|exists:roles,id',
         ];
     }
 
@@ -45,23 +39,19 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'El nombre es obligatorio.',
-            'name.string' => 'El nombre debe ser un texto.',
-            'name.max' => 'El nombre no puede superar los 255 caracteres.',
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.email' => 'El correo electrónico debe tener un formato válido.',
-            'email.unique' => 'El correo electrónico ya está registrado.',
+            'email.exists' => 'El correo electrónico no está registrado.',
             'password.required' => 'La contraseña es obligatoria.',
             'password.string' => 'La contraseña debe ser un texto.',
             'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
-            'password.regex' => 'La contraseña debe tener al menos una mayúscula y un símbolo especial (!@#$%^&*).',
-            'company_id.required' => 'La compañía es obligatoria para el registro.',
+            'password.regex' => 'La contraseña debe tener al menos una mayúscula y un símbolo especial (!@#$%^&*(),.?":{}|<>).',
+            'company_id.required' => 'La compañía es obligatoria para el inicio de sesión.',
             'company_id.exists' => 'La compañía seleccionada no existe.',
-            'role_id.exists' => 'El rol seleccionado no existe.',
         ];
     }
 
-    /**
+     /**
      * Handle a failed validation attempt.
      *
      * @param  \Illuminate\Contracts\Validation\Validator  $validator

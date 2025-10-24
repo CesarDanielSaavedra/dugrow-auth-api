@@ -22,18 +22,19 @@ class RegisterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
+    /**
+     * Registro de usuario
+     *
+     * Validaciones requeridas para el registro:
+     * - name: obligatorio, string, máximo 255 caracteres
+     * - email: obligatorio, formato email, único en users
+     * - password: obligatorio, mínimo 8 caracteres, al menos una mayúscula y un símbolo especial
+     * - company_id: obligatorio, debe existir en la tabla companies
+     * - role_id: opcional, si no se envía se asigna el rol por defecto (usuario común)
+     */
     public function register(RegisterRequest $request)
     {
-        // 1. Validar los datos recibidos
-        // Usamos el validador de Laravel para asegurar integridad y seguridad
-
-        // Validaciones requeridas para el registro:
-        // - name: obligatorio, string, máximo 255 caracteres
-        // - email: obligatorio, formato email, único en users
-        // - password: obligatorio, mínimo 8 caracteres, al menos una mayúscula y un símbolo especial
-        // - company_id: obligatorio, debe existir en la tabla companies
-        // - role_id: opcional, si no se envía se asigna el rol por defecto (usuario común)
-        // Usamos el RegisterRequest para validar y obtener los datos validados
+        // 1. Validar los datos recibidos (ya lo hace RegisterRequest)
         $validated = $request->validated();
 
         // Si la validación falla, Laravel responde automáticamente con 422 y los errores

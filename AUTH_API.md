@@ -33,8 +33,6 @@ Estas prácticas aseguran que la API Auth no solo replica la interfaz de Supabas
 - [`tymon/jwt-auth`](https://github.com/tymondesigns/jwt-auth)
 
 **Impacto en los endpoints:**
-- Todos los endpoints protegidos requieren ahora un header `Authorization: Bearer <token>` con un JWT válido.
-- El login (`/auth/v1/token`) devuelve un JWT estándar, compatible con cualquier cliente.
 - El endpoint `/auth/v1/refresh` permite renovar el token JWT.
 - El endpoint `/auth/v1/user` obtiene los datos del usuario autenticado a partir del JWT.
 - El logout invalida el token JWT (si se implementa blacklist, opcional).
@@ -42,7 +40,6 @@ Estas prácticas aseguran que la API Auth no solo replica la interfaz de Supabas
 **Compatibilidad Supabase:**
 - El formato de requests y responses se mantiene compatible con Supabase, pero la autenticación es ahora JWT puro.
 
-**Ver también:**
 - Ver sección "Cambio clave: De Sanctum a JWT puro (tymon/jwt-auth)" en `ARCHITECTURE.md` para detalles técnicos y justificación.
 
 ## Objetivo
@@ -50,65 +47,59 @@ Esta API replica los endpoints y respuestas de Supabase Auth, permitiendo que el
 
 ---
 
-## Endpoints principales
 
-### 1. Registro de usuario
-- **POST /auth/v1/signup**
-- **Request:**
-  - email
-  - password
-- **Response:**
-  - Usuario creado, datos básicos, mensaje de éxito o error
+## Endpoint: Login
 
-### 2. Login (token)
-- **POST /auth/v1/token**
-- **Request:**
-  - email
-  - password
-- **Response:**
-  - access_token
-  - refresh_token (opcional)
-  - usuario
-  - mensaje de éxito o error
+### POST /api/login
 
-### 3. Obtener usuario autenticado
-- **GET /auth/v1/user**
-- **Headers:**
-  - Authorization: Bearer <token>
-- **Response:**
-  - Datos del usuario
-  - mensaje de éxito o error
+- **Método:** POST
+- **Body (JSON):**
+  ```json
+  {
+    "email": "admin@dugrow.com",
+    "password": "Password123!",
+  }
+  ```
+- **Respuesta exitosa:**
+  ```json
+  {
 
-### 4. Logout
-- **POST /auth/v1/logout**
-- **Headers:**
-  - Authorization: Bearer <token>
-- **Response:**
-  - mensaje de éxito o error
+    "access_token": "<JWT_TOKEN>",
+    "token_type": "bearer",
+    "expires_in": 3600,
+    "user": {
+      "id": 1,
+      "name": "Admin Dugrow",
+      "email": "admin@dugrow.com",
+      "company_id": 1,
+      "role_id": 1
+    }
+  }
 
-### 5. Recuperar contraseña
-- **POST /auth/v1/recover**
-- **Request:**
-  - email
-- **Response:**
-  - mensaje de éxito o error
-
-### 6. Verificar email
-- **POST /auth/v1/verify**
-- **Request:**
-  - token de verificación
-- **Response:**
-  - mensaje de éxito o error
-
-### 7. Refrescar token
-- **POST /auth/v1/refresh**
-- **Request:**
-  - refresh_token
-- **Response:**
-  - access_token nuevo
-  - mensaje de éxito o error
+**Errores:**
+  ```json
+    {
+    "success": false,
+    "message": "Error de validación de datos.",
+    "errors": {
+        "company_id": [
+        "La compañía seleccionada no existe."
+        ]
+    }
+    }
+  ```
 
 ---
+
+**Notas:**
+- Todos los endpoints devuelven respuestas en formato JSON.
+- Para acceder a endpoints protegidos, incluye el token JWT en el header:
+  ```http
+  Authorization: Bearer <JWT_TOKEN>
+  ```
+- El campo `expires_in` indica el tiempo de validez del token en segundos.
+
+
 
 ## Relación entre User y Role
 

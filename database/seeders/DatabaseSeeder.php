@@ -16,6 +16,6 @@ class DatabaseSeeder extends Seeder
         // Ejecuta el seeder de roles de Auth
         $this->call(\Database\Seeders\Auth\RoleSeeder::class);
         // Ejecuta el seeder del usuario admin inicial
-        $this->call(\Database\Seeders\Auth\AdminUserSeeder::class);
+        $this->call(\Database\Seeders\Auth\UserSeeder::class);
     }
 }
