@@ -1,4 +1,3 @@
----
 
 ## 📝 Decisiones separation-ready y multi-empresa (Oct 2025)
 
@@ -50,7 +49,7 @@ Esta API replica los endpoints y respuestas de Supabase Auth, permitiendo que el
 
 ## Endpoint: Login
 
-### POST /api/login
+### POST /auth/v1/token
 
 - **Método:** POST
 - **Body (JSON):**
@@ -58,12 +57,14 @@ Esta API replica los endpoints y respuestas de Supabase Auth, permitiendo que el
   {
     "email": "admin@dugrow.com",
     "password": "Password123!",
+    "company_id": 1
   }
   ```
-- **Respuesta exitosa:**
+
+- **Respuesta exitosa (200):**
   ```json
   {
-
+    "success": true,
     "access_token": "<JWT_TOKEN>",
     "token_type": "bearer",
     "expires_in": 3600,
@@ -75,18 +76,27 @@ Esta API replica los endpoints y respuestas de Supabase Auth, permitiendo que el
       "role_id": 1
     }
   }
+  ```
 
-**Errores:**
+- **Error credenciales inválidas (401):**
   ```json
-    {
+  {
+    "success": false,
+    "message": "Credenciales inválidas."
+  }
+  ```
+
+- **Error de validación (422):**
+  ```json
+  {
     "success": false,
     "message": "Error de validación de datos.",
     "errors": {
-        "company_id": [
+      "company_id": [
         "La compañía seleccionada no existe."
-        ]
+      ]
     }
-    }
+  }
   ```
 
 ---
