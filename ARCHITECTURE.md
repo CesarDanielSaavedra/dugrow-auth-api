@@ -1,3 +1,49 @@
+---
+
+
+## 📝 Historial de decisiones separation-ready (Oct 2025)
+
+### 🔄 Cambio clave: De Sanctum a JWT puro (tymon/jwt-auth)
+
+**Octubre 2025:** Se decidió migrar de Laravel Sanctum a JWT puro usando el paquete `tymon/jwt-auth` para la autenticación de la API. Esta decisión se tomó por las siguientes razones:
+
+- **Interoperabilidad real:** JWT es un estándar ampliamente soportado por clientes, gateways y microservicios en cualquier lenguaje. Facilita la integración con frontend, apps móviles y otros servicios.
+- **Stateless total:** JWT no requiere almacenamiento de tokens en base de datos ni cookies, lo que simplifica la separación futura en microservicios y reduce dependencias cruzadas.
+- **Compatibilidad Supabase-like:** JWT permite replicar el flujo de autenticación de Supabase (login, refresh, logout, user info) de forma transparente y portable.
+- **Desacoplamiento:** El backend puede evolucionar o separarse en servicios Auth/Business sin depender de la tabla `personal_access_tokens` ni de middleware stateful.
+- **Estándar profesional:** JWT es el método recomendado para APIs modernas, especialmente en arquitecturas separation-ready y multi-tenant.
+
+**¿Por qué NO Sanctum?**
+- Sanctum está optimizado para SPAs en el mismo dominio (stateful) o para APIs simples, pero requiere almacenamiento de tokens y no es tan portable para microservicios o integraciones externas.
+- En separation-ready, la validación de tokens debe ser universal y desacoplada, lo que JWT resuelve mejor.
+
+**Impacto en la arquitectura:**
+- Se elimina la dependencia de Sanctum y la tabla `personal_access_tokens`.
+- Los endpoints Auth ahora usan JWT estándar (Bearer Token en Authorization header).
+- La validación de usuarios autenticados se realiza vía JWTSubject y el middleware de tymon/jwt-auth.
+- La documentación y ejemplos se actualizan para reflejar JWT puro.
+
+**Paquete utilizado:**
+- [`tymon/jwt-auth`](https://github.com/tymondesigns/jwt-auth) (instalado vía Composer, ver sección de instalación y configuración en este repo).
+
+**Nota:**
+La arquitectura separation-ready, la organización de migraciones/modelos y la compatibilidad Supabase-like se mantienen intactas, solo cambia el mecanismo de autenticación a uno más robusto y profesional.
+
+Durante la implementación inicial del proyecto, se tomaron decisiones prácticas para garantizar que la arquitectura separation-ready no sea solo teórica, sino real y operativa desde el día 1. Estas son las principales acciones y su justificación:
+
+- **Migraciones organizadas por dominio:** Todas las migraciones de autenticación (users, roles, companies, personal_access_tokens) se ubican en `database/migrations/auth/`, y las de negocio en `database/migrations/business/`. Esto permite ejecutar, mantener y migrar cada dominio de forma independiente, facilitando la futura separación en microservicios.
+
+- **Modelos y seeders orquestados:** Los modelos y seeders siguen la misma lógica de separación. Los seeders de Auth están en `database/seeders/auth/` y se orquestan desde un `DatabaseSeeder` central, asegurando integridad referencial y facilidad de mantenimiento.
+
+- **Soft deletes en tablas principales:** Se implementó soft deletes en users, roles y companies para permitir borrado lógico y trazabilidad, anticipando necesidades de auditoría y recuperación de datos en entornos multi-empresa.
+
+- **Relaciones explícitas y convenciones estrictas:** Se definieron relaciones belongsTo y hasMany entre User, Role y Company, y se respetaron convenciones de nombres y namespaces para que la migración a microservicios sea directa y sin refactorizaciones costosas.
+
+- **Pruebas de migraciones y seeders:** Se validó el flujo completo de migraciones y seeders en entornos limpios, asegurando que la base de datos siempre pueda reconstruirse desde cero, condición clave para entornos separation-ready y CI/CD.
+
+- **Ejecución de migraciones por subcarpeta:** Se documentó y aplicó la ejecución de migraciones por subcarpeta (`php artisan migrate --path=...`) para mantener la separación lógica sin sacrificar automatización.
+
+Estas prácticas aseguran que el proyecto no solo esté preparado para escalar y desacoplarse en el futuro, sino que ya opera bajo los principios separation-ready, minimizando deuda técnica y facilitando la evolución hacia microservicios cuando el negocio lo requiera.
 # 🏗️ ARQUITECTURA SEPARATION-READY
 
 ## 📋 Índice
