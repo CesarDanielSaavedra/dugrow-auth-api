@@ -11,9 +11,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-    // Ejecuta el seeder de roles de Auth
-    $this->call(\Database\Seeders\Auth\RoleSeeder::class);
-    // Ejecuta el seeder del usuario admin inicial
-    $this->call(\Database\Seeders\Auth\AdminUserSeeder::class);
+        // Ejecuta el seeder de empresas (DU GROW)
+        $this->call(\Database\Seeders\Auth\CompanySeeder::class);
+        // Ejecuta el seeder de roles de Auth
+        $this->call(\Database\Seeders\Auth\RoleSeeder::class);
+        // Ejecuta el seeder del usuario admin inicial
+        $this->call(\Database\Seeders\Auth\UserSeeder::class);
     }
 }
