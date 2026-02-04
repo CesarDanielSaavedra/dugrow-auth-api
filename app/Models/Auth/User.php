@@ -76,6 +76,12 @@ class User extends Authenticatable implements JWTSubject
     // Devuelve un array de claims personalizados para el JWT (puedes agregar info extra si lo deseas)
     public function getJWTCustomClaims()
     {
-        return [];
+        return [
+            'name' => $this->name,
+            'email' => $this->email,
+            'company_id' => $this->company_id,
+            'role_id' => $this->role_id,
+            'role_name' => $this->role->name ?? 'user',
+        ];
     }
 }
