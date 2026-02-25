@@ -41,7 +41,7 @@ Route::prefix('auth/v1')->group(function () {
     // RUTAS PROTEGIDAS (requieren token válido)
     // ============================================
 
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware('auth:api')->group(function () {
 
         // Obtener datos del usuario autenticado
         Route::get('/user', function () {
