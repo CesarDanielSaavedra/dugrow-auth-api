@@ -37,23 +37,22 @@ class LoginController extends Controller
         }
 
         // 3. Validar que el usuario autenticado pertenezca a la company_id enviada
-        $user = auth()->user()->load('role'); // Cargar relación role
+        $user = auth()->user();
         if ($user->company_id != $validated['company_id']) {
             // Si el company_id no coincide, invalidar el token y devolver error 401
             JWTAuth::invalidate($token);
             return response()->json([
                 'success' => false,
-                'message' => 'Credenciales inválidas.'
+                'message' => 'Empresa inválida.'
             ], 401);
         }
 
-        // 4. Si la autenticación y company_id son correctos, devolver token y datos del usuario
+        // 4. Si la autenticación y company_id son correctos, devolver token
         return response()->json([
             'success' => true,
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => JWTAuth::factory()->getTTL() * 60, // por standard son 60 minutos
-            'user' => $user
         ]);
     }
 }
