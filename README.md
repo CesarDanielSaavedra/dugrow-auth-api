@@ -49,6 +49,20 @@ Compatible con la firma de Supabase Auth — el frontend puede cambiar de provee
 	php artisan key:generate
 	```
 
+## ⚠️ PHP en WAMP — Usar PHP 8.2 en la terminal
+
+WAMP usa PHP 7.4 por defecto en la CLI. Laravel 11 requiere PHP 8.2+.
+Al abrir una terminal nueva, correr esto **antes de cualquier comando artisan**:
+
+```powershell
+$env:PATH="C:\wamp64\bin\php\php8.2.26;$env:PATH"
+```
+
+Verificar con `php --version` — debe mostrar `8.2.x`.
+Ver detalles completos en [`docs/PHP_CLI_VERSION.md`](./docs/PHP_CLI_VERSION.md).
+
+---
+
 ## Levantar el servidor
 
 Para iniciar el servidor de desarrollo:
