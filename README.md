@@ -71,6 +71,7 @@ Esto dejará la base de datos lista para pruebas y desarrollo separation-ready.
 
 ## Datos de prueba
 
+<<<<<<< Updated upstream
 Usuarios generados por los seeders:
 
 - **Admin**
@@ -96,3 +97,78 @@ Usuarios generados por los seeders:
 ---
 
 Desarrollado por Dugrow Team.
+=======
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+---
+
+## Setup local para duGrow Auth API (Laravel + WAMP + HeidiSQL)
+
+### 1. Clona el repositorio
+
+Abre la carpeta `www` de tu WAMP (`C:\wamp64\www`).
+Ejecuta el siguiente comando en PowerShell o CMD:
+
+```bash
+git clone <url-del-repo>
+```
+
+### 2. Instala Composer
+
+Si no tienes Composer instalado en Windows:
+- Descarga el instalador oficial desde [getcomposer.org](https://getcomposer.org/)
+- Ejecuta el instalador y asegúrate de agregar Composer al PATH
+- Prueba la instalación con:
+
+```bash
+composer --version
+```
+
+### 3. Instala dependencias de Laravel
+
+Navega al directorio del proyecto y corre:
+
+```bash
+composer install
+```
+
+### 4. Configura la base de datos
+
+Abre HeidiSQL para verificar:
+- Host: `127.0.0.1` o `localhost`
+- Puerto: `3306` (el default de WAMP)
+- Usuario: `root` (por defecto)
+- Contraseña: (en WAMP suele estar vacía)
+- El nombre de la base de datos (visible en el árbol izquierdo, puedes crearla desde ahí)
+
+Edita el archivo `.env` con estos datos:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=dugrow-auth-api
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### 5. Genera la clave de la app
+
+```bash
+php artisan key:generate
+```
+
+### 6. Levanta el servidor de Laravel
+
+Puedes usar el server embebido (dev):
+
+```bash
+php artisan serve
+```
+
+O configurar un VirtualHost en WAMP si prefieres que responda directo desde Apache.
+
+### 7. Probar integración con Frontend
+
+Usa la URL local (por ejemplo `http://localhost:8000`) para desarrollar y testear el front y la API juntos.
+>>>>>>> Stashed changes
