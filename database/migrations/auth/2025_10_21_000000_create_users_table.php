@@ -17,11 +17,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->unsignedBigInteger('role_id');
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('restrict');
-<<<<<<< Updated upstream:database/migrations/auth/2025_10_21_000000_create_users_table.php
             $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('restrict');
-=======
->>>>>>> Stashed changes:database/migrations/auth/0001_01_01_000000_create_users_table.php
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
