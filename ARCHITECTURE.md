@@ -1,5 +1,13 @@
 ---
 
+> **Nota para el asistente:** Este archivo documenta la arquitectura completa del backend. Leer también `AUTH_API.md` para el estado de implementación de los endpoints.
+>
+> **Estado actual (Mayo 2026):**
+> - Controllers `LoginController` y `RegisterController` están implementados en `app/Http/Controllers/Auth/`
+> - Modelos `User`, `Role`, `Company` están implementados en `app/Models/Auth/`
+> - Migraciones en `database/migrations/auth/` — 4 archivos (roles, companies, users, personal_access_tokens)
+> - `routes/auth.php` tiene stubs — los controllers NO están conectados todavía
+> - JWT (tymon/jwt-auth) ya instalado y configurado en el modelo User
 
 ## 📝 Historial de decisiones separation-ready (Oct 2025)
 

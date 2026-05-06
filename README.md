@@ -1,7 +1,21 @@
 
-# Dugrow Auth API - TEST DE DEPLOY EN  PROD
+# dugrow-auth-api
 
-API de autenticación separation-ready para Dugrow, basada en Laravel y JWT.
+> **Nota para el asistente:** Leer `ARCHITECTURE.md` y `AUTH_API.md` para contexto completo. El resumen de estado está en `AUTH_API.md`.
+
+API de autenticación separation-ready para DuGrow, basada en Laravel + JWT puro (tymon/jwt-auth).
+Compatible con la firma de Supabase Auth — el frontend puede cambiar de proveedor solo cambiando la variable de entorno.
+
+## Estado actual (Mayo 2026)
+
+- ✅ `LoginController` implementado (JWT, valida company_id)
+- ✅ `RegisterController` implementado
+- ✅ Modelos `User`, `Role`, `Company` con relaciones y SoftDeletes
+- ✅ 4 migraciones en `database/migrations/auth/`
+- ⚠️ `routes/auth.php` — rutas son stubs, controllers NO conectados
+- ⏳ `LogoutController` y `UserController` pendientes
+
+**Lo primero a hacer al retomar:** Conectar las rutas a los controllers existentes.
 
 ## Características
 
