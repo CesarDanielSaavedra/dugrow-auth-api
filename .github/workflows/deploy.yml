@@ -22,11 +22,13 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            set -e
             echo "🔄 Navegando al directorio del proyecto..."
             cd ~/dugrow-api
 
-            echo "📥 Descargando últimos cambios desde main..."
-            git pull origin main
+            echo "📥 Forzando sincronización con origin/main (descarta cambios locales del server)..."
+            git fetch origin
+            git reset --hard origin/main
 
             echo "📦 Instalando/actualizando dependencias de Composer..."
             composer install --no-dev --optimize-autoloader --no-interaction
