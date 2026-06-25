@@ -24,9 +24,11 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|exists:users,email',
-            // La expresión regular para símbolo especial escapa correctamente las comillas y el slash
-            'password' => 'required|string|min:8|regex:/[A-Z]/|regex:/[!@#$%^&*(),.?{}<>]/',
+            'email' => 'required|email',
+            // En el login NO validamos complejidad de la contraseña: solo que venga.
+            // Verificar el formato acá filtraría requisitos y daría pistas a un atacante.
+            // Las credenciales incorrectas las resuelve el controller con un 401 genérico.
+            'password' => 'required|string',
             'company_id' => 'required|exists:companies,id',
         ];
     }
@@ -41,11 +43,7 @@ class LoginRequest extends FormRequest
         return [
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.email' => 'El correo electrónico debe tener un formato válido.',
-            'email.exists' => 'El correo electrónico no está registrado.',
             'password.required' => 'La contraseña es obligatoria.',
-            'password.string' => 'La contraseña debe ser un texto.',
-            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
-            'password.regex' => 'La contraseña debe tener al menos una mayúscula y un símbolo especial (!@#$%^&*(),.?":{}|<>).',
             'company_id.required' => 'La compañía es obligatoria para el inicio de sesión.',
             'company_id.exists' => 'La compañía seleccionada no existe.',
         ];

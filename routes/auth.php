@@ -1,19 +1,20 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
 | Auth API Routes
 |--------------------------------------------------------------------------
 |
-| Rutas de autenticación compatibles con Supabase Auth API.
-| Todas las rutas tienen el prefijo /auth/v1
+| Rutas de autenticación. Todas con el prefijo /auth/v1.
+| La autenticación la maneja Laravel Sanctum (guard 'api' → driver sanctum).
 |
 | Ejemplos de URLs finales:
 | - POST /api/auth/v1/signup
 | - POST /api/auth/v1/token
-| - GET  /api/auth/v1/user (protegida con auth:sanctum)
+| - GET  /api/auth/v1/user   (protegida)
 |
 */
 
@@ -23,41 +24,17 @@ Route::prefix('auth/v1')->group(function () {
     // RUTAS PÚBLICAS (sin autenticación)
     // ============================================
 
-    // Registro de nuevo usuario
-    Route::post('/signup', [\App\Http\Controllers\Auth\RegisterController::class, 'register']);
-
-    // Login (obtener token)
-    Route::post('/token', [\App\Http\Controllers\Auth\LoginController::class, 'login']);
-
-    // Recuperar contraseña
-    Route::post('/recover', function () {
-        return response()->json([
-            'message' => 'Endpoint /recover - TODO: Implementar PasswordRecoveryController'
-        ]);
-    });
-
+    Route::post('/signup', [AuthController::class, 'register']);
+    Route::post('/token', [AuthController::class, 'login']);
+    Route::post('/recover', [AuthController::class, 'recover']);
 
     // ============================================
     // RUTAS PROTEGIDAS (requieren token válido)
     // ============================================
 
     Route::middleware('auth:api')->group(function () {
-
-        // Obtener datos del usuario autenticado
-        Route::get('/user', function () {
-            return response()->json([
-                'message' => 'Endpoint /user - TODO: Implementar UserController',
-                'user' => auth()->user()
-            ]);
-        });
-
-        // Cerrar sesión (invalidar token)
-        Route::post('/logout', function () {
-            return response()->json([
-                'message' => 'Endpoint /logout - TODO: Implementar LogoutController'
-            ]);
-        });
-
+        Route::get('/user', [AuthController::class, 'user']);
+        Route::post('/logout', [AuthController::class, 'logout']);
     });
 
 });
