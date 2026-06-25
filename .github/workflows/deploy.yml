@@ -31,8 +31,8 @@ jobs:
             echo "📦 Instalando/actualizando dependencias de Composer..."
             composer install --no-dev --optimize-autoloader --no-interaction
 
-            echo "🗄️ Ejecutando migraciones de base de datos..."
-            php artisan migrate --force
+            echo "🗄️ RECONSTRUYENDO base de datos (wipe + seed) — CAMBIO TEMPORAL, se revierte después..."
+            php artisan migrate:fresh --seed --force
 
             echo "🧹 Limpiando cachés antiguos..."
             php artisan config:clear

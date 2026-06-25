@@ -8,12 +8,12 @@ namespace App\Models\Auth;
 // - HasFactory: permite usar factories para tests y seeders
 // - Notifiable: habilita notificaciones (emails, etc)
 // - SoftDeletes: permite borrado lógico (no elimina físicamente)
-// - JWTSubject: interfaz para compatibilidad JWT puro (tymon/jwt-auth)
+// - HasApiTokens: permite al usuario emitir tokens de API (Laravel Sanctum)
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use Laravel\Sanctum\HasApiTokens;
 
 // Importación del modelo Role para la relación
 use App\Models\Auth\Role;
@@ -21,10 +21,10 @@ use App\Models\Auth\Role;
 use App\Models\Auth\Company;
 
 // El modelo User extiende Authenticatable para heredar la funcionalidad de usuario autenticable de Laravel
-// e implementa JWTSubject para ser compatible con JWT puro (tymon/jwt-auth)
-class User extends Authenticatable implements JWTSubject
+// y usa el trait HasApiTokens de Sanctum para poder emitir tokens de API
+class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     // $fillable define los atributos que pueden asignarse masivamente (mass assignment)
     // Es una medida de seguridad para evitar que se asignen campos no deseados al crear/actualizar usuarios
@@ -63,25 +63,6 @@ class User extends Authenticatable implements JWTSubject
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-        ];
-    }
-
-    // Métodos requeridos por JWTSubject para JWT puro:
-    // Devuelve el identificador único del usuario para el token JWT (normalmente el id)
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    // Devuelve un array de claims personalizados para el JWT (puedes agregar info extra si lo deseas)
-    public function getJWTCustomClaims()
-    {
-        return [
-            'name' => $this->name,
-            'email' => $this->email,
-            'company_id' => $this->company_id,
-            'role_id' => $this->role_id,
-            'role_name' => $this->role->name ?? 'user',
         ];
     }
 }

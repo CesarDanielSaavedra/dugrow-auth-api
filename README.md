@@ -1,7 +1,21 @@
 
-# Dugrow Auth API - TEST DE DEPLOY EN  PROD
+# dugrow-auth-api
 
-API de autenticación separation-ready para Dugrow, basada en Laravel y JWT.
+> **Nota para el asistente:** Leer `ARCHITECTURE.md` y `AUTH_API.md` para contexto completo. El resumen de estado está en `AUTH_API.md`.
+
+API de autenticación separation-ready para DuGrow, basada en Laravel + JWT puro (tymon/jwt-auth).
+Compatible con la firma de Supabase Auth — el frontend puede cambiar de proveedor solo cambiando la variable de entorno.
+
+## Estado actual (Mayo 2026)
+
+- ✅ `LoginController` implementado (JWT, valida company_id)
+- ✅ `RegisterController` implementado
+- ✅ Modelos `User`, `Role`, `Company` con relaciones y SoftDeletes
+- ✅ 4 migraciones en `database/migrations/auth/`
+- ⚠️ `routes/auth.php` — rutas son stubs, controllers NO conectados
+- ⏳ `LogoutController` y `UserController` pendientes
+
+**Lo primero a hacer al retomar:** Conectar las rutas a los controllers existentes.
 
 ## Características
 
@@ -34,6 +48,20 @@ API de autenticación separation-ready para Dugrow, basada en Laravel y JWT.
 	```powershell
 	php artisan key:generate
 	```
+
+## ⚠️ PHP en WAMP — Usar PHP 8.2 en la terminal
+
+WAMP usa PHP 7.4 por defecto en la CLI. Laravel 11 requiere PHP 8.2+.
+Al abrir una terminal nueva, correr esto **antes de cualquier comando artisan**:
+
+```powershell
+$env:PATH="C:\wamp64\bin\php\php8.2.26;$env:PATH"
+```
+
+Verificar con `php --version` — debe mostrar `8.2.x`.
+Ver detalles completos en [`docs/PHP_CLI_VERSION.md`](./docs/PHP_CLI_VERSION.md).
+
+---
 
 ## Levantar el servidor
 
@@ -85,13 +113,17 @@ Usuarios generados por los seeders:
 
 ## Endpoints principales
 
-- POST `/api/register` — Registro de usuario
-- POST `/api/login` — Login y obtención de JWT
+- POST `/api/auth/v1/signup` — Registro de usuario
+- POST `/api/auth/v1/token` — Login y obtención de token
+- GET  `/api/auth/v1/user` — Usuario autenticado (requiere Bearer token)
+- POST `/api/auth/v1/logout` — Cerrar sesión
+- POST `/api/auth/v1/recover` — Recuperar contraseña
 
 ## Notas
 
 - El proyecto está preparado para integración y pruebas separation-ready.
-- Los endpoints protegidos requieren autenticación JWT.
+- Los endpoints protegidos requieren autenticación Bearer token (Sanctum).
+- Compatible con la firma de Supabase Auth — el frontend puede apuntar a cualquiera de los dos.
 
 ---
 

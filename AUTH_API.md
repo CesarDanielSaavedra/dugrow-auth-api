@@ -1,6 +1,8 @@
 
 ## 📝 Decisiones separation-ready y multi-empresa (Oct 2025)
 
+> **Estado actual (Mayo 2026):** Los controllers `LoginController` y `RegisterController` están implementados pero las rutas en `routes/auth.php` siguen siendo stubs. Conectar rutas a controllers es la próxima tarea urgente.
+
 Durante la implementación de la API de autenticación, se tomaron decisiones clave para garantizar una base separation-ready, compatible con escenarios multi-empresa y alineada con la integración Supabase-like:
 
 - **Incorporación de companies:** Se agregó la tabla y modelo `companies` para soportar usuarios asociados a una empresa (`company_id`), permitiendo escenarios multi-tenant y segmentación de datos desde el inicio.
@@ -42,11 +44,21 @@ Estas prácticas aseguran que la API Auth no solo replica la interfaz de Supabas
 - Ver sección "Cambio clave: De Sanctum a JWT puro (tymon/jwt-auth)" en `ARCHITECTURE.md` para detalles técnicos y justificación.
 
 ## Objetivo
-Esta API replica los endpoints y respuestas de Supabase Auth, permitiendo que el frontend funcione con Supabase o con este backend simplemente cambiando el endpoint.
+Esta API replica los endpoints y respuestas de Supabase Auth. El frontend puede apuntar a Supabase o a este backend cambiando solo la variable de entorno `NEXT_PUBLIC_PRODUCTION_API_BASE_URL`.
+
+### Tabla de estado de implementación (Mayo 2026)
+
+| Endpoint | Controller | Conectado en rutas |
+|----------|-----------|-------------------|
+| POST `/api/auth/v1/token` | `LoginController@login` ✅ | ⚠️ NO — ruta es stub |
+| POST `/api/auth/v1/signup` | `RegisterController@register` ✅ | ⚠️ NO — ruta es stub |
+| POST `/api/auth/v1/logout` | ⏳ pendiente | ⏳ pendiente |
+| GET `/api/auth/v1/user` | ⏳ pendiente | ⏳ pendiente |
+| POST `/api/auth/v1/recover` | ⏳ pendiente | ⏳ pendiente |
+
+**Nota sobre el response del login:** El `LoginController` devuelve `access_token` pero NO incluye el objeto `user`. El frontend en `useLogin.ts` espera `data.user` para guardarlo en el store. Hay que actualizar el response.
 
 ---
-
-
 ## Endpoint: Login
 
 ### POST /auth/v1/token
